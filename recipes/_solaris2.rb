@@ -44,9 +44,9 @@ when 5.10
     # 'build-essential-0.0.4-1.sun4v.solaris'
     omnibus_package_name =
       "build-essential-
-      #{node['build-essential']['solaris10_package_version']}.
-      #{node['kernel']['machine']}.
-      solaris"
+#{node['build-essential']['solaris10_package_version']}.\
+#{node['kernel']['machine']}.\
+solaris"
 
     build_essential_package_url = File.join(node['build-essential']['solaris10_package_url'], omnibus_package_name)
 
