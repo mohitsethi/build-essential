@@ -18,3 +18,7 @@
 #
 
 default['build-essential']['compile_time'] = false
+
+# Solaris 10 omnibus-build-essential package information
+default['build-essential']['solaris10_package_url'] = 'https://chef-releng.s3.amazonaws.com/omnibus/build-essential'
+default['build-essential']['solaris10_package_version'] = '0.0.4-1'

@@ -20,6 +20,46 @@
 case node['platform_version'].to_f
 when 5.10
   # install omnibus build essential package
+  potentially_at_compile_time do
+    # create a nocheck file for automated install
+    file '/var/sadm/install/admin/auto-install' do
+      content <<-EOH.flush
+        mail=
+        instance=overwrite
+        partial=nocheck
+        runlevel=nocheck
+        idepend=nocheck
+        space=ask
+        setuid=nocheck
+        conflict=nocheck
+        action=nocheck
+        basedir=default
+      EOH
+      owner 'root'
+      group 'root'
+      mode '0444'
+    end
+
+    # Expect the package name to be something like
+    # 'build-essential-0.0.4-1.sun4v.solaris'
+    omnibus_package_name =
+      "build-essential-
+      #{node['build-essential']['solaris10_package_version']}.
+      #{node['kernel']['machine']}.
+      solaris"
+
+    build_essential_package_url = File.join(node['build-essential']['solaris10_package_url'], omnibus_package_name)
+
+    remote_file "#{Chef::Config[:file_cache_path]}/#{omnibus_package_name}" do
+      source build_essential_package_url
+      not_if { File.exist?('/opt/build-essential') }
+    end
+
+    package 'build-essential' do
+      source "#{Chef::Config[:file_cache_path]}/#{omnibus_package_name}"
+      not_if { File.exist?('/opt/build-essential') }
+    end
+  end
 when 5.11
   potentially_at_compile_time do
     package 'autoconf'
